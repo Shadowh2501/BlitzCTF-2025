@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maze Karo</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="cyber-grid"></div>
+  <div class="container">
+    <h1 class="title">MAZE KARO</h1>
+    <div class="status-panel">
+      <div id="log">POSITION: <span id="coords" class="highlight">(0,0)</span></div>
+    </div>
+    
+    <div class="control-panel">
+      <div class="dpad">
+        <div class="dpad-row">
+          <button data-move="up" class="dpad-btn dpad-up">▲</button>
+        </div>
+        <div class="dpad-row">
+          <button data-move="left" class="dpad-btn dpad-left">◄</button>
+          <div class="dpad-center"></div>
+          <button data-move="right" class="dpad-btn dpad-right">►</button>
+        </div>
+        <div class="dpad-row">
+          <button data-move="down" class="dpad-btn dpad-down">▼</button>
+        </div>
+      </div>
+    </div>
+    
+    <div id="message" class="message"></div>
+    
+    <!-- Temporary button to show submission panel for testing -->
+    <div style="text-align: center; margin: 20px 0;">
+      <button id="test-submit" style="
+        background: var(--cyber-warning);
+        color: var(--cyber-bg);
+        border: 2px solid var(--cyber-warning);
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-family: 'Share Tech Mono', monospace;
+        font-weight: bold;
+      ">Show Submission Panel</button>
+    </div>
+    
+    <div id="winbox" class="win-panel hidden">
+      <div class="win-content">
+        <h2>ACCESS GRANTED</h2>
+        <p>Submit your navigation sequence:</p>
+        <input type="text" id="code" placeholder="RRUUDDLL..." class="code-input" />
+        <button id="submit" class="submit-btn">DECRYPT FLAG</button>
+        <div id="result" class="result"></div>
+      </div>
+    </div>
+  </div>
+  <script src="/static/script.js"></script>
+</body>
+</html>

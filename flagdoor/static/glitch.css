@@ -1,0 +1,75 @@
+@keyframes glitch-anim-text {
+
+  0% {
+    transform: none;
+    clip-path: polygon(0 0, 100% 0, 100% 0%, 0 0%, 0 5vh, 100% 5vh, 100% 100%, 0 100%);
+  }
+
+
+  9%, 11% {
+    transform: scale(1, 1);
+  }
+  10% {
+    transform: scale(-1, 0);
+  }
+
+  49%, 51% {
+    transform: none;
+  }
+  50% {
+    transform: scale(-1, 1) translate(10px, 5px);
+  }
+  50.5% {
+    transform: translate(-10px, -5px);
+  }
+
+  69%, 71% {
+    filter: none;
+  }
+  70% {
+    filter: invert(100%);
+  }
+
+  80% {
+    filter: drop-shadow(-5px 0 rgba(255, 0, 255, .6)) drop-shadow(5px 0 rgba(0, 255, 255, .6));
+  }
+
+  100% {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 5vh), 0 calc(100% - 5vh), 0 100%, 100% 100%, 100% 100%, 0 100%);
+  }
+}
+
+body {
+  display: flow-root;
+  margin: 1em;
+  min-height: calc(100vh - (2 * 1em));
+  color: #f314d2;
+  background: #0c0133;
+  animation: glitch-anim-text 5s infinite linear;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+  font-size: 20px;
+}
+
+html::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url(background.jpg);
+  background-position: center center;
+  background-size: cover;
+  background-attachment: fixed;
+  opacity: 40%;
+}
+
+body > main {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}

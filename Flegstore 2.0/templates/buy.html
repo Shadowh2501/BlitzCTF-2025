@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Buy Page</title>
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet"/>
+</head>
+<body>
+    <header>
+        <div class="left-section">
+            <button class="settings-icon">⚙️</button>
+        </div>
+        <div class="logo">Click Counter - Buy</div>
+        <div class="header-actions">
+            <button id="returnButton" class="action-button">Back to Clicks</button>
+        </div>
+    </header>
+
+    <main>
+        <div class="buy-page-wrapper">
+            <div class="info-container">
+                <div class="info-item">
+                    <p class="counter-label">Flag Price</p>
+                    <p class="buy-counter" id="flagPrice">9,999</p>
+                </div>
+                <div class="info-item">
+                    <p class="counter-label">Your Clicks</p>
+                    <p class="buy-counter" id="walletValue">{{ clicks }}</p>
+                </div>
+            </div>
+
+            <button id="buyButton" class="action-button primary">Buy Now</button>
+            <div id="responseMessage"></div>
+        </div>
+    </main>
+
+    <script>
+        const returnButton = document.getElementById('returnButton');
+        const buyButton = document.getElementById('buyButton');
+        const responseMessage = document.getElementById('responseMessage');
+        const walletValueEl = document.getElementById('walletValue');
+
+        returnButton.addEventListener('click', () => {
+            window.location.href = "/";
+        });
+
+        buyButton.addEventListener('click', () => {
+            responseMessage.textContent = '';
+            responseMessage.className = '';
+            buyButton.disabled = true;
+            buyButton.textContent = 'Processing...';
+
+            fetch('/buy_item', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ buy_item: "Flag" })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().catch(() => {
+                       throw new Error(`HTTP error ${response.status}`);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                responseMessage.textContent = data.message || 'Request processed.';
+
+                if (data.success) {
+                    responseMessage.classList.add('success');
+                    if (data.new_clicks !== undefined) {
+                        walletValueEl.textContent = data.new_clicks.toLocaleString();
+                    }
+                } else {
+                    responseMessage.classList.add('error');
+                    buyButton.disabled = false;
+                    buyButton.textContent = 'Buy Now';
+                }
+            })
+            .catch(error => {
+                console.error('Fetch Error:', error);
+                responseMessage.textContent = error.message || 'Error: Could not connect to server.';
+                responseMessage.classList.add('error');
+                buyButton.disabled = false;
+                buyButton.textContent = 'Buy Now';
+            });
+        });
+    </script>
+</body>
+</html>

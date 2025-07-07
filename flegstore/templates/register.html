@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card cyber-card mt-5">
+      <div class="card-header text-center">
+        <h2 class="neon-text">Register</h2>
+      </div>
+      <div class="card-body">
+        <form method="POST" action="{{ url_for('register') }}">
+          <div class="mb-3">
+            <label for="username" class="form-label neon-text">Username</label>
+            <input
+              type="text"
+              class="form-control cyber-input"
+              id="username"
+              name="username"
+              placeholder="Choose a username"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label neon-text">Password</label>
+            <input
+              type="password"
+              class="form-control cyber-input"
+              id="password"
+              name="password"
+              placeholder="Enter your password"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="confirm_password" class="form-label neon-text">Confirm Password</label>
+            <input
+              type="password"
+              class="form-control cyber-input"
+              id="confirm_password"
+              name="confirm_password"
+              placeholder="Confirm your password"
+              required
+            />
+          </div>
+          <button type="submit" class="btn btn-neon w-100">Register</button>
+        </form>
+        <p class="text-center mt-3">
+          <a class="neon-hover" href="{{ url_for('login_page') }}">Already have an account? Login</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

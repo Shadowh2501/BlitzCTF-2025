@@ -1,0 +1,38 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-neon px-4">
+  <a class="navbar-brand neon-text" href="{{ url_for('dashboard') }}">FLEG ST0RE</a>
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-bs-toggle="collapse"
+    data-bs-target="#navbarNav"
+    aria-controls="navbarNav"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  {% if session.token %}
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav me-auto">
+      <li class="nav-item">
+        <a class="nav-link neon-hover" href="{{ url_for('dashboard') }}">Dashboard</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link neon-hover" href="{{ url_for('shop') }}">Shop</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link neon-hover" href="{{ url_for('cart') }}">Cart</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link neon-hover" href="{{ url_for('redeem_page') }}">Redeem</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link neon-hover text-danger" href="{{ url_for('logout_page') }}">Logout</a>
+      </li>
+    </ul>
+  </div>
+  {% endif %}
+</nav>

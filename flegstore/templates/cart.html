@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="neon-text mt-4">Your Cart</h2>
+<div class="row">
+  <div class="col-md-8">
+    {% if cart_items %}
+      <table class="table table-hover table-cyber">
+        <thead class="cyber-thead">
+          <tr>
+            <th>Item</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in cart_items %}
+          <tr>
+            <td class="neon-text">{{ row['item'] }}</td>
+            <td class="neon-text">{{ row['price'] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <p class="neon-text"><strong>Total Cost:</strong> {{ total_cost }}</p>
+      <form method="POST" action="{{ url_for('checkout') }}">
+        <input type="hidden" name="total_cost" value="{{ total_cost }}" />
+        <button type="submit" class="btn btn-neon"
+          {% if balance < total_cost %} disabled {% endif %}>
+          Checkout
+        </button>
+      </form>
+      {% if balance < total_cost %}
+      <div class="alert alert-warning mt-3 neon-text">
+        You have {{ balance }} but need {{ total_cost }}.
+      </div>
+      {% endif %}
+    {% else %}
+      <p class="text-muted neon-text">Your cart is empty.</p>
+    {% endif %}
+  </div>
+  <div class="col-md-4">
+    <div class="card cyber-card text-center">
+      <div class="card-header">
+        <h5 class="neon-text">Your Balance</h5>
+      </div>
+      <div class="card-body">
+        <h2 class="neon-text">{{ balance }}</h2>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

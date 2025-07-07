@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card cyber-card mt-5">
+      <div class="card-header text-center">
+        <h2 class="neon-text">Redeem Coupon</h2>
+      </div>
+      <div class="card-body">
+        <form method="POST" action="{{ url_for('redeem_page') }}">
+          <div class="mb-3">
+            <label for="coupon" class="form-label neon-text">Coupon Code</label>
+            <input
+              type="text"
+              class="form-control cyber-input"
+              id="coupon"
+              name="coupon"
+              placeholder="Enter coupon code"
+              required
+            />
+          </div>
+          <button type="submit" class="btn btn-neon w-100">Redeem</button>
+        </form>
+        <div class="mt-3 neon-text">
+          <strong>Current Balance:</strong> {{ balance }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

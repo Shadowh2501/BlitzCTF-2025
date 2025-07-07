@@ -1,0 +1,351 @@
+
+        :root {
+            --bg-dark: #1a1a1a;
+            --bg-darker: #121212;
+            --bg-card: #222222;
+            --accent: #3ecf8e;
+            --accent-hover: #2eb378;
+            --text-primary: #ffffff;
+            --text-secondary: #afafaf;
+            --border: #333333;
+            --button-bg: #2b2b2b;
+            --button-hover: #343434;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.2s ease;
+        }
+
+        body {
+            font-family: 'Ubuntu Mono', monospace;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        header {
+            padding: 20px;
+            background-color: var(--bg-darker);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .action-button {
+            background-color: var(--button-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .action-button:hover {
+            background-color: var(--button-hover);
+        }
+
+        .action-button.primary {
+            background-color: var(--accent);
+            color: #000000;
+            border: none;
+        }
+
+        .action-button.primary:hover {
+            background-color: var(--accent-hover);
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .counter-container {
+            text-align: center;
+        }
+
+        #clickButton {
+            background-color: var(--accent);
+            color: #000000;
+            border: none;
+            border-radius: 6px;
+            padding: 16px 32px;
+            font-size: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 30px;
+            min-width: 200px;
+        }
+
+        #clickButton:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+
+        #clickButton:active {
+            transform: translateY(0);
+        }
+
+        .counter {
+            font-size: 120px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        .counter-label {
+            font-size: 22px;
+            color: var(--text-secondary);
+            letter-spacing: 0.5px;
+        }
+
+        #progressBarContainer {
+            margin-top: 10px;
+            width: 100%;
+            max-width: 300px;
+            height: 6px;
+        }
+
+        progress {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            appearance: none;
+            background-color: #444444;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        progress::-webkit-progress-bar {
+            background-color: #444444;
+        }
+
+        progress::-webkit-progress-value {
+            background-color: var(--accent);
+            border-radius: 3px;
+        }
+
+        .settings-container {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            background-color: var(--bg-darker);
+            width: 300px;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            z-index: 100;
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+        }
+
+        .settings-container.open {
+            transform: translateX(0);
+        }
+
+        .settings-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .settings-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .close-settings {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        .settings-options {
+            padding: 20px;
+        }
+
+        .settings-option {
+            padding: 12px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            transition: background-color 0.2s ease;
+        }
+
+        .settings-option:hover {
+            background-color: var(--button-bg);
+        }
+
+        .settings-icon {
+            color: var(--text-primary);
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+        }
+
+        .settings-icon:hover {
+            background-color: var(--button-bg);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--bg-card);
+            color: var(--text-primary);
+            padding: 12px 20px;
+            border-radius: 4px;
+            border-left: 4px solid var(--accent);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 90;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .disclaimer {
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 20px;
+            padding: 10px;
+            border-top: 1px solid var(--border);
+        }
+        .buy-page-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background-color: var(--bg-card);
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            max-width: 600px;
+            width: 90%;
+        }
+
+        .info-container {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-bottom: 30px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .info-item {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .info-item .counter-label {
+            margin-bottom: 10px;
+        }
+
+        .info-item .buy-counter {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--text-primary);
+            word-wrap: break-word;
+        }
+
+        #buyButton {
+            padding: 12px 28px;
+            font-size: 18px;
+            min-width: 150px;
+            margin-bottom: 20px;
+        }
+
+        #responseMessage {
+            padding: 10px 15px;
+            border-radius: 4px;
+            font-weight: 600;
+            min-height: 1.5em;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        #responseMessage.success {
+            color: var(--accent);
+            background-color: rgba(62, 207, 142, 0.1);
+        }
+
+        #responseMessage.error {
+            color: #e74c3c;
+            background-color: rgba(231, 76, 60, 0.1);
+        }
+
+        .left-section {}
+
+        @media (max-width: 480px) {
+            .buy-page-wrapper {
+                padding: 20px;
+            }
+            .info-container {
+                flex-direction: column;
+                gap: 25px;
+                margin-bottom: 25px;
+            }
+            .info-item .buy-counter {
+                font-size: 36px;
+            }
+            #buyButton {
+                padding: 10px 24px;
+                font-size: 16px;
+            }
+        }

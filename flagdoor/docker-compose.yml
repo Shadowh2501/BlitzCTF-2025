@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - ADMIN_PASS=${ADMIN_PASS:-Shadowh2501}
+      - SECRET_KEY=${SECRET_KEY:-BlitzCTF2025}
+    volumes:
+      - ./templates:/app/templates:ro
+      - ./static:/app/static:ro

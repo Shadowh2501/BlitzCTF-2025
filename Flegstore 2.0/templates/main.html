@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Click Counter</title>
+  <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap" rel="stylesheet"/>
+  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet"/>
+</head>
+<body>
+  <header>
+    <div class="left-section">
+      <button id="settingsButton" class="settings-icon">⚙️</button>
+    </div>
+    <div class="logo">Click Counter</div>
+    <div class="header-actions">
+      <button id="saveButton" class="action-button primary">Save</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="counter-container">
+      <button id="clickButton">CLICK</button>
+      <div class="counter" id="clickCount">0</div>
+      <div class="counter-label">TOTAL CLICKS</div>
+      <div id="progressBarContainer">
+        <progress id="cooldownProgress" value="0" max="100"></progress>
+      </div>
+    </div>
+  </main>
+
+  <div id="settingsPanel" class="settings-container">
+    <div class="settings-header">
+      <div class="settings-title">Settings</div>
+      <button id="closeSettings" class="close-settings">×</button>
+    </div>
+    <div class="settings-options">
+      <div class="settings-option" id="createBackup">Create Backup</div>
+      <div class="settings-option" id="restoreBackup">Restore Backup</div>
+      <div class="settings-option" id="getFlag" href="/buy">Buy Flag</div>
+    </div>
+  </div>
+
+  <div id="overlay" class="overlay"></div>
+  <div id="toast" class="toast"></div>
+
+  <div class="disclaimer">
+    <p><strong>No bots allowed!</strong> Save clicks to avoid progress loss and saving more than 5 in a interval is banned to prevent bot spamming.</p>
+  </div>
+
+  <script>
+    let clickCount = {{ clicks }};
+    let originalClicks = {{ clicks }};
+    let lastClickTime = 0;
+
+    const clickCountEl = document.getElementById('clickCount');
+    const toast = document.getElementById('toast');
+    const settingsPanel = document.getElementById('settingsPanel');
+    const overlay = document.getElementById('overlay');
+    const settingsButton = document.getElementById('settingsButton');
+    const closeSettings = document.getElementById('closeSettings');
+
+    function updateClickCount() {
+      clickCountEl.textContent = clickCount;
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    function toggleSettings() {
+      settingsPanel.classList.toggle('open');
+      overlay.classList.toggle('active');
+    }
+
+    settingsButton.addEventListener('click', toggleSettings);
+    closeSettings.addEventListener('click', toggleSettings);
+    overlay.addEventListener('click', toggleSettings);
+
+    document.getElementById('clickButton').addEventListener('click', () => {
+      const now = Date.now();
+      const cooldown = 1000;
+
+      if (now - lastClickTime >= cooldown) {
+        clickCount++;
+        updateClickCount();
+        lastClickTime = now;
+
+        clickCountEl.style.transform = 'scale(1.05)';
+        setTimeout(() => clickCountEl.style.transform = 'scale(1)', 100);
+
+        if (clickCount - originalClicks > 5) {
+          showToast("Reminder: Save your progress now.");
+        }
+
+        startCooldown(cooldown);
+      }
+    });
+
+    function startCooldown(duration) {
+      const progressBar = document.getElementById('cooldownProgress');
+      let elapsed = 0;
+      const interval = setInterval(() => {
+        elapsed += 10;
+        const percent = Math.min((elapsed / duration) * 100, 100);
+        progressBar.value = percent;
+        if (elapsed >= duration) {
+          clearInterval(interval);
+          progressBar.value = 0;
+        }
+      }, 10);
+    }
+
+    document.getElementById('saveButton').addEventListener('click', () => {
+      fetch('/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ clicks: clickCount })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.error) {
+          showToast(data.error);
+        } else {
+          showToast(data.message);
+          originalClicks = clickCount;
+        }
+      })
+      .catch(() => showToast("Error saving."));
+    });
+
+    document.getElementById('createBackup').addEventListener('click', () => {
+      showToast("Creating backup...");
+
+      fetch('/create_backup', { method: 'GET' })
+        .then(response => response.json())
+        .then(data => {
+          const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = 'backup.json';
+          link.click();
+
+          showToast("Backup created!");
+        })
+        .catch(() => showToast("Error creating backup"));
+
+      toggleSettings();
+    });
+
+
+document.getElementById('restoreBackup').addEventListener('click', () => {
+  // Create an input element to allow the user to select a file
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';  // Only accept .json files
+
+  input.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (!file) {
+      showToast("No file selected.");
+      return;
+    }
+
+    // Create a FileReader to read the contents of the selected file
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const jsonData = JSON.parse(reader.result);
+
+        // Sending the JSON data to the backend via POST request
+        fetch('/restore_backup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(jsonData),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showToast("Backup restored successfully!");
+                setTimeout(() => {
+                    window.location.href = '/';  // Redirect to the home page
+                }, 1000);  // 1 second delay
+          } else {
+            showToast(data.error || "Error restoring backup.");
+          }
+        })
+        .catch(() => showToast("Error sending backup data."));
+      } catch (error) {
+        showToast("Error reading backup file.");
+      }
+    };
+
+    reader.readAsText(file);
+  });
+
+  input.click();  // Trigger the file input dialog
+});
+
+
+    document.getElementById('getFlag').addEventListener('click', () => {
+        window.location.href = '/buy';
+    });
+
+    updateClickCount();
+  </script>
+</body>
+</html>
