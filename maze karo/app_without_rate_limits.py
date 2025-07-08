@@ -17,7 +17,7 @@ if os.path.exists('.env'):
     load_dotenv()
 app.secret_key = os.urandom(24)
 
-WIDTH, HEIGHT = 25, 25
+WIDTH, HEIGHT = 100, 100
 
 def build_maze(width, height):
     w, h = width, height
