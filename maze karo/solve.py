@@ -4,7 +4,7 @@ URL = "http://127.0.0.1:5000"  # Change to your server's address if needed!
 session = requests.Session()
 session.get(URL)
 
-WIDTH, HEIGHT = 25, 25
+WIDTH, HEIGHT = 100, 100
 END = (WIDTH, HEIGHT)
 
 DIRS = [
